@@ -39,11 +39,11 @@ def flingStartup(flings:list[tuple])->list[list[int]]:
             minDimensions[0]=item[0]
         if item[1]<minDimensions[1]:
             minDimensions[1]=item[1]
-    grid = [[0 for row in range(maxDimensions[1])] for column in range(maxDimensions[0]+1)]
+    grid = [[0 for row in range(minDimensions[1]-1,maxDimensions[1]+1)] for column in range(minDimensions[0]-1,maxDimensions[0]+1)]
+    for i in range(len(flings)):
+        flings[i]= (flings[i][0]-minDimensions[0]+1,flings[i][1]-minDimensions[1]+1)
     for fling in flings:
         grid[fling[0]][fling[1]]=1
-    # for i in range(len(flings)):
-    #     flings[i]= (flings[i][0]-minDimensions[0],flings[i][1]-minDimensions[1])
     return grid
 
 # def flingStartup(board:str):
@@ -104,22 +104,30 @@ def grabBoard(grid):
 def gridCopy(grid):
     return [[i for i in grid[j]] for j in range(len(grid))]
 
-def flingRunner(grid, flings, gridstates):
-    # printGrid(grid)
-    gridstates.append(gridCopy(grid))
+def flingRunner(grid:list[list[int]], flings:list[tuple], gridstates:list[tuple],intVal:str=""):
+    gridstates.append((gridCopy(grid),intVal))
     potentialMoves = findMoves(grid,flings)
-    for i in potentialMoves:
+    for val,i in enumerate(potentialMoves):
         copyGrid = gridCopy(grid)
         flingBall(i[0],i[1],copyGrid,i[2])
-        flingRunner(copyGrid,grabBoard(copyGrid),gridstates)
+        flingRunner(copyGrid,grabBoard(copyGrid),gridstates,intVal+str(val))
     for igrid in gridstates:
-        if len(grabBoard(igrid))==1:
-            return igrid
+        if len(grabBoard(igrid[0]))==1:
+            stringCode = igrid[1]
+            rv = []
+            for string in gridstates:
+                if string[1] in stringCode:
+                    rv.append(string[0])
+            # rv.append(igrid[0])
+            return rv
+    return "No solution"
 
 def printGrid(grid):
     for row in grid:
         print(row)
     print("\n\n")
 
+# printGrid(grid)
 output = flingRunner(grid,sampleInput,[])
-printGrid(output)
+for i in output:
+    printGrid(i)
