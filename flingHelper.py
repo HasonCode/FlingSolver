@@ -1,4 +1,4 @@
-sampleInput = [(1,4),(6,3),(2,1),(4,4)]
+sampleInput = [(0,0),(2,0),(3,0),(4,0),(2,4),(1,6),(5,5),(6,5),(7,5)]
 #[]
 #[]
 #[]
@@ -6,7 +6,7 @@ sampleInput = [(1,4),(6,3),(2,1),(4,4)]
 #[]
 #[]
 #[]
-
+iteration = 1
 
 def findMoves(grid:list[list[int]],flings:list[tuple[int]]):
     potentialMoves = []
@@ -108,13 +108,15 @@ def grabBoard(grid):
 def gridCopy(grid):
     return [[i for i in grid[j]] for j in range(len(grid))]
 
-def flingRunner(grid:list[list[int]], flings:list[tuple], gridstates:list[tuple],intVal:str=""):
+def flingRunner(grid:list[list[int]], flings:list[tuple], gridstates:list[tuple],intVal:str="", iteration=[0], printing = False):
     gridstates.append((gridCopy(grid),intVal))
     potentialMoves = findMoves(grid,flings)
     for val,i in enumerate(potentialMoves):
+        if printing: print(str(iteration[0]), len(grabBoard(grid)))
+        iteration[0]+=1
         copyGrid = gridCopy(grid)
         flingBall(i[0],i[1],copyGrid,i[2])
-        flingRunner(copyGrid,grabBoard(copyGrid),gridstates,intVal+f"{i[0]},{grid[i[0][0]][i[0][1]]} {i[2]} to {i[0]},{grid[i[1][0]][i[1][1]]}\n")
+        flingRunner(copyGrid,grabBoard(copyGrid),gridstates,intVal+f"{i[0]},{grid[i[0][0]][i[0][1]]} {i[2]} to {i[0]},{grid[i[1][0]][i[1][1]]}\n",iteration)
     for igrid in gridstates:
         if len(grabBoard(igrid[0]))==1:
             return igrid
@@ -126,7 +128,7 @@ def printGrid(grid):
     print("\n")
 
 # printGrid(grid)
-output = flingRunner(grid,sampleInput,[])
+# output = flingRunner(grid,sampleInput,[])
 
-print(f"{output[1]}\n")
-printGrid(output[0])
+# print(f"{output[1]}\n")
+# printGrid(output[0])
