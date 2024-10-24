@@ -1,6 +1,7 @@
 sampleInput = [(0,0),(2,0),(3,0),(4,0),(2,4),(1,6),(5,5),(6,5)]
 import time
 import random
+import multiprocessing as mp
 #Attempt 2.0
 def find_moves(flings):
     move_list = []
@@ -132,6 +133,10 @@ def print_grid(grid):
         print(row)
     print("\n")
 
+def squarer(x):
+    return x**2
+def parallel_test(nums):
+    mp.Pool()
 # og_grid = [(3, 4), (2, 1), (3, 3), (1, 3)]
 # flings2 = [(0,0),(2,0)]
 # print_grid(to_grid(sampleInput))
